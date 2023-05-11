@@ -1,10 +1,11 @@
 package com.hackerrank.weather.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Weather {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
