@@ -1,11 +1,10 @@
 package com.hackerrank.weather.service;
 
+import com.hackerrank.weather.exceptions.WeatherNotFoundException;
 import com.hackerrank.weather.model.Weather;
 import com.hackerrank.weather.repository.WeatherRepository;
-import com.sun.source.tree.TryTree;
 import java.util.List;
 import java.util.Optional;
-import javax.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
@@ -20,13 +19,12 @@ public class WeatherServiceImpl implements WeatherService {
   }
 
   @Override
-  public Optional <Weather> getWeatherById( Integer weatherId) {
-    try {
-      Weather weather = weatherRepository.getOne(weatherId);
-      return Optional.of(weather);
-    } catch (EntityNotFoundException e) {
-      return Optional.empty();
+  public Weather getWeatherById( Integer id) {
+    Optional<Weather> optionalWeather = weatherRepository.findById(id);
+    if (optionalWeather.isEmpty()) {
+      throw new WeatherNotFoundException("Weather not found with id: " + id);
     }
+    return optionalWeather.get();
   }
 
   @Override

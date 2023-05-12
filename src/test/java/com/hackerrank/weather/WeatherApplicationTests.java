@@ -130,9 +130,9 @@ class WeatherApplicationTests {
                 .andExpect(jsonPath("$.temperature").value(weather.getTemperature()))
                 .andExpect(status().isOk());
 
-//        mockMvc.perform(get("/weather/" + Integer.MAX_VALUE))
-//                .andDo(print())
-//                .andExpect(status().isNotFound());
+        mockMvc.perform(get("/weather/" + Integer.MAX_VALUE))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 
     @Test

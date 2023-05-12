@@ -1,9 +1,9 @@
 package com.hackerrank.weather.controller;
 
+import com.hackerrank.weather.exceptions.WeatherNotFoundException;
 import com.hackerrank.weather.model.Weather;
 import com.hackerrank.weather.service.WeatherService;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/weather")
@@ -33,10 +32,12 @@ public class WeatherApiRestController {
 
   @GetMapping("/{id}")
   public ResponseEntity<Weather> getWeatherById (@PathVariable Integer id) {
-    Optional <Weather> optionalWeather = weatherService.getWeatherById(id);
-    Weather weather = optionalWeather.orElseThrow(() ->
-        new ResponseStatusException(HttpStatus.NOT_FOUND, "Weather not found"));
-    return ResponseEntity.ok().body(weather);
+    try {
+      Weather weather = weatherService.getWeatherById(id);
+      return ResponseEntity.ok().body(weather);
+    } catch (WeatherNotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
   }
 
   @PostMapping()
